@@ -10,6 +10,13 @@ const Items = (props) => {
         )
     }
 
+    const removeFromCartHandler = (event) => {
+        event.preventDefault();
+        cartCtx.removeItem(
+            event.target.id
+        )
+    }
+
     // styles
     const labelStyle = {
         color: 'red',
@@ -29,6 +36,7 @@ const Items = (props) => {
         {props.itemsList.map(item =>
             <li style={listStyle} key={item.id}>
                 <button onClick={addToCartHandler} id={item.id}>ADD TO CART</button>
+                <button onClick={removeFromCartHandler} id={item.id}>REMOVE FROM CART</button>
                 <div style={labelStyle}>Name:
                 <span style={spanStyle}>{item.name}</span>
                 </div>

@@ -11,6 +11,15 @@ const cartReducer = (state, action) => {
         let updatedItems = state.items.concat(action.item)
         return { items: updatedItems }
     }
+    if (action.type === 'REMOVE_CART') {
+        const copyOfStateItems = [...state.items]
+        let selectedItemIndex = copyOfStateItems.findIndex(item => item.id === +action.id)
+        if (selectedItemIndex !== -1) {
+            copyOfStateItems.splice(selectedItemIndex, 1)
+            return { items: copyOfStateItems }
+        }
+        return { items: copyOfStateItems }
+    }
     return initialCartState
 }
 
@@ -27,6 +36,15 @@ const CartProvider = props => {
         )
     }
 
+    const removeFromCartHandler = id => {
+        dispatchCartState(
+            {
+                type: 'REMOVE_CART',
+                id: id
+            }
+        )
+    }
+
     const cartContext = {
         // now we need to do the following things
         // 1. Access cart from different places
@@ -35,7 +53,8 @@ const CartProvider = props => {
         // 4. For items list however we need to do that using states. I am using reducer because of the complexicity
 
         items: cartState.items,
-        addItem: addToCartHandler
+        addItem: addToCartHandler,
+        removeItem: removeFromCartHandler
     }
     // the value attr of cart context will be transported throughout the project
     return (
@@ -44,7 +63,4 @@ const CartProvider = props => {
         </CartContext.Provider>
     )
 }
-
-
-
 export default CartProvider
